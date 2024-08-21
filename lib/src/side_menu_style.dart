@@ -38,7 +38,7 @@ class SideMenuStyle {
 
   /// Size of icon on [SideMenuItem]
   double? iconSize;
-  
+
   /// Style of [title] text when item is selected in [SideMenuExpandableItem]
   TextStyle? selectedTitleTextStyleExpandable;
 
@@ -87,6 +87,8 @@ class SideMenuStyle {
   /// Property that will show Hamburger Icon on TopLeft Corner
   bool showHamburger;
 
+  Color? backgroundExpansionColor;
+
   /// Style class to configure [SideMenu]
   SideMenuStyle({
     this.openSideMenuWidth = 300,
@@ -114,6 +116,7 @@ class SideMenuStyle {
     this.itemOuterPadding = const EdgeInsets.symmetric(horizontal: 5.0),
     this.itemInnerSpacing = 8.0,
     this.itemHeight = 50.0,
+    this.backgroundExpansionColor,
     this.itemBorderRadius = const BorderRadius.all(
       Radius.circular(5.0),
     ),

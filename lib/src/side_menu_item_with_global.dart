@@ -4,8 +4,7 @@ import 'package:easy_sidemenu/src/side_menu_display_mode.dart';
 import 'global/global.dart';
 import 'package:easy_sidemenu/src/side_menu_controller.dart';
 
-typedef SideMenuItemBuilder = Widget Function(
-    BuildContext context, SideMenuDisplayMode displayMode);
+typedef SideMenuItemBuilder = Widget Function(BuildContext context, SideMenuDisplayMode displayMode);
 
 class SideMenuItemList {
   late List<dynamic> items;
@@ -27,8 +26,8 @@ class SideMenuItemWithGlobal extends StatefulWidget {
     this.tooltipContent,
     this.trailing,
     this.builder,
-  })  : assert(title != null || icon != null || builder != null,
-            'Title, icon and builder should not be empty at the same time'),
+    this.isItemExpand,
+  })  : assert(title != null || icon != null || builder != null, 'Title, icon and builder should not be empty at the same time'),
         super(key: key);
 
   /// A function that call when tap on [SideMenuItemWithGlobal]
@@ -56,6 +55,8 @@ class SideMenuItemWithGlobal extends StatefulWidget {
   /// Content of the tooltip - if not filled, the [title] will
   /// be used. [showTooltipOverItemsName] must be set to true.
   final String? tooltipContent;
+
+  final bool? isItemExpand;
 
   /// A widget to display after the title.
   ///
@@ -85,8 +86,7 @@ class _SideMenuItemState extends State<SideMenuItemWithGlobal> {
   @override
   void initState() {
     super.initState();
-    _nonNullableWrap(WidgetsBinding.instance)!
-        .addPostFrameCallback((timeStamp) {
+    _nonNullableWrap(WidgetsBinding.instance)!.addPostFrameCallback((timeStamp) {
       // Set initialPage, only if the widget is still mounted
       if (mounted) {
         currentPage = widget.global.controller.currentPage;
@@ -130,10 +130,7 @@ class _SideMenuItemState extends State<SideMenuItemWithGlobal> {
   }
 
   bool isSameWidget(SideMenuItemWithGlobal other) {
-    if (other.icon == widget.icon &&
-        other.title == widget.title &&
-        other.builder == widget.builder &&
-        other.trailing == widget.trailing) {
+    if (other.icon == widget.icon && other.title == widget.title && other.builder == widget.builder && other.trailing == widget.trailing) {
       return true;
     } else {
       return false;
@@ -177,12 +174,9 @@ class _SideMenuItemState extends State<SideMenuItemWithGlobal> {
   Color _setColor() {
     if (_getIndexOfCurrentSideMenuItemWidget() == currentPage) {
       if (isHovered) {
-        return widget.global.style.selectedHoverColor ??
-            widget.global.style.selectedColor ??
-            Theme.of(context).highlightColor;
+        return widget.global.style.selectedHoverColor ?? widget.global.style.selectedColor ?? Theme.of(context).highlightColor;
       } else {
-        return widget.global.style.selectedColor ??
-            Theme.of(context).highlightColor;
+        return widget.global.style.selectedColor ?? Theme.of(context).highlightColor;
       }
     } else if (isHovered) {
       return widget.global.style.hoverColor ?? Colors.transparent;
@@ -199,7 +193,7 @@ class _SideMenuItemState extends State<SideMenuItemWithGlobal> {
     final Color iconColor = _isCurrentSideMenuItemSelected()
         ? widget.global.style.selectedIconColor ?? Colors.black
         : widget.global.style.unselectedIconColor ?? Colors.black54;
-    final double iconSize = widget.global.style.iconSize ?? 24;
+    final double iconSize = widget.isItemExpand == true ? 8 : widget.global.style.iconSize ?? 24;
 
     final Icon icon = Icon(
       mainIcon.icon,
@@ -227,8 +221,7 @@ class _SideMenuItemState extends State<SideMenuItemWithGlobal> {
   Widget build(BuildContext context) {
     if (widget.builder == null) {
       return InkWell(
-        onTap: () => widget.onTap?.call(
-            _getIndexOfCurrentSideMenuItemWidget(), widget.global.controller),
+        onTap: () => widget.onTap?.call(_getIndexOfCurrentSideMenuItemWidget(), widget.global.controller),
         onHover: (value) {
           safeSetState(() {
             isHovered = value;
@@ -251,20 +244,16 @@ class _SideMenuItemState extends State<SideMenuItemWithGlobal> {
               valueListenable: widget.global.displayModeState,
               builder: (context, value, child) {
                 return Tooltip(
-                  message: (value == SideMenuDisplayMode.compact &&
-                          widget.global.style.showTooltip)
-                      ? widget.tooltipContent ?? widget.title ?? ""
-                      : "",
+                  message:
+                      (value == SideMenuDisplayMode.compact && widget.global.style.showTooltip) ? widget.tooltipContent ?? widget.title ?? "" : "",
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        vertical: value == SideMenuDisplayMode.compact
-                            ? widget.global.style.itemInnerSpacing
-                            : widget.global.style.itemInnerSpacing),
+                        vertical: value == SideMenuDisplayMode.compact ? widget.global.style.itemInnerSpacing : widget.global.style.itemInnerSpacing),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                            width: widget.global.style.itemInnerSpacing * 2),
+                        widget.isItemExpand == true ? const SizedBox(width: 20) : const SizedBox(),
+                        SizedBox(width: widget.global.style.itemInnerSpacing * 2),
                         _generateIcon(widget.icon, widget.iconWidget),
                         SizedBox(width: widget.global.style.itemInnerSpacing),
                         if (value == SideMenuDisplayMode.open) ...[
@@ -274,24 +263,15 @@ class _SideMenuItemState extends State<SideMenuItemWithGlobal> {
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 widget.title ?? '',
-                                overflow: TextOverflow
-                                    .ellipsis, // Helps to handle long text
-                                style: _getIndexOfCurrentSideMenuItemWidget() ==
-                                        currentPage.ceil()
-                                    ? const TextStyle(
-                                            fontSize: 17, color: Colors.black)
-                                        .merge(widget.global.style
-                                            .selectedTitleTextStyle)
-                                    : const TextStyle(
-                                            fontSize: 17, color: Colors.black54)
-                                        .merge(widget.global.style
-                                            .unselectedTitleTextStyle),
+                                overflow: TextOverflow.ellipsis, // Helps to handle long text
+                                style: _getIndexOfCurrentSideMenuItemWidget() == currentPage.ceil()
+                                    ? const TextStyle(fontSize: 17, color: Colors.black).merge(widget.global.style.selectedTitleTextStyle)
+                                    : const TextStyle(fontSize: 17, color: Colors.black54).merge(widget.global.style.unselectedTitleTextStyle),
                               ),
                             ),
                           ),
                           const SizedBox.shrink(),
-                          if (widget.trailing != null &&
-                              widget.global.showTrailing) ...[
+                          if (widget.trailing != null && widget.global.showTrailing) ...[
                             // Aligning the trailing widget to the right
                             Flexible(
                               child: Align(

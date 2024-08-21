@@ -12,10 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'easy_sidemenu Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: false
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: false),
       home: const MyHomePage(title: 'easy_sidemenu Demo'),
       debugShowCheckedModeBanner: false,
     );
@@ -62,6 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
               hoverColor: Colors.blue[100],
               selectedHoverColor: Colors.blue[100],
               selectedColor: Colors.lightBlue,
+              backgroundExpansionColor: Colors.grey[200],
               selectedTitleTextStyle: const TextStyle(color: Colors.white),
               selectedIconColor: Colors.white,
               // decoration: BoxDecoration(
@@ -89,12 +87,9 @@ class _MyHomePageState extends State<MyHomePage> {
             footer: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.lightBlue[50],
-                    borderRadius: BorderRadius.circular(12)),
+                decoration: BoxDecoration(color: Colors.lightBlue[50], borderRadius: BorderRadius.circular(12)),
                 child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 10),
                   child: Text(
                     'mohada',
                     style: TextStyle(fontSize: 15, color: Colors.grey[800]),
@@ -154,12 +149,9 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
                 icon: const Icon(Icons.file_copy_rounded),
                 trailing: Container(
-                    decoration: const BoxDecoration(
-                        color: Colors.amber,
-                        borderRadius: BorderRadius.all(Radius.circular(6))),
+                    decoration: const BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.all(Radius.circular(6))),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 6.0, vertical: 3),
+                      padding: const EdgeInsets.symmetric(horizontal: 6.0, vertical: 3),
                       child: Text(
                         'New',
                         style: TextStyle(fontSize: 11, color: Colors.grey[800]),
@@ -206,7 +198,9 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-          const VerticalDivider(width: 0,),
+          const VerticalDivider(
+            width: 0,
+          ),
           Expanded(
             child: PageView(
               controller: pageController,
