@@ -51,7 +51,7 @@ class SideMenu extends StatefulWidget {
   /// Width when will our open menu collapse into the compact one
   final int? collapseWidth;
 
-  final List<bool> expansionStateListInit;
+  List<bool> expansionStateListInit;
 
   /// ### Easy Sidemenu widget
   ///
@@ -79,7 +79,7 @@ class SideMenu extends StatefulWidget {
         sideMenuExpansionItemCount = sideMenuExpansionItemCount + 1;
       }
     }
-    global.expansionStateList = expansionStateListInit;
+    global.expansionStateList = List.from(expansionStateListInit);
     sidemenuitems.items = items.map((data) {
       if (data is SideMenuItem) {
         return SideMenuItemWithGlobal(
