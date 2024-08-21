@@ -267,8 +267,14 @@ class _SideMenuState extends State<SideMenu> {
     // Create the hamburger icon button
     final IconButton hamburgerIcon = IconButton(
       icon: _hamburgerMode == SideMenuHamburgerMode.open
-          ? const Icon(Icons.keyboard_double_arrow_left_rounded)
-          : const Icon(Icons.keyboard_double_arrow_right_rounded),
+          ? Icon(
+              Icons.keyboard_double_arrow_left_rounded,
+              color: widget.style?.unselectedIconColor,
+            )
+          : Icon(
+              Icons.keyboard_double_arrow_right_rounded,
+              color: widget.style?.selectedIconColor,
+            ),
       onPressed: _toggleHamburgerState,
     );
 
@@ -280,7 +286,15 @@ class _SideMenuState extends State<SideMenu> {
 
     // Return the side menu widget
     return ((widget.global.style.showHamburger) && (_hamburgerMode == SideMenuHamburgerMode.close))
-        ? Align(alignment: Alignment.bottomLeft, child: hamburgerIcon)
+        ? Align(
+            alignment: Alignment.bottomLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(
+                bottom: 10,
+              ),
+              child: hamburgerIcon,
+            ),
+          )
         : AnimatedContainer(
             duration: _toggleDuration(),
             width: _currentWidth,
@@ -308,7 +322,11 @@ class _SideMenuState extends State<SideMenu> {
                     child: Row(
                       children: [
                         Expanded(child: widget.footer!),
-                        if (widget.global.style.showHamburger) hamburgerIcon,
+                        if (widget.global.style.showHamburger)
+                          Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: hamburgerIcon,
+                          ),
                       ],
                     ),
                   ),
