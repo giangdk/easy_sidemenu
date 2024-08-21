@@ -175,6 +175,15 @@ class _SideMenuState extends State<SideMenu> {
     }
   }
 
+  // IconButton hamburgerIcon() {
+  //   return IconButton(
+  //     icon: _hamburgerMode == SideMenuHamburgerMode.open
+  //         ? const Icon(Icons.keyboard_double_arrow_left_rounded)
+  //         : const Icon(Icons.keyboard_double_arrow_right_rounded),
+  //     onPressed: _toggleHamburgerState,
+  //   );
+  // }
+
   // Notifies the parent widget if the onDisplayModeChanged callback is provided.
   void _notifyParent() {
     if (widget.onDisplayModeChanged != null) {
@@ -257,7 +266,9 @@ class _SideMenuState extends State<SideMenu> {
 
     // Create the hamburger icon button
     final IconButton hamburgerIcon = IconButton(
-      icon: const Icon(IconData(0xe3dc, fontFamily: 'MaterialIcons')),
+      icon: _hamburgerMode == SideMenuHamburgerMode.open
+          ? const Icon(Icons.keyboard_double_arrow_left_rounded)
+          : const Icon(Icons.keyboard_double_arrow_right_rounded),
       onPressed: _toggleHamburgerState,
     );
 
@@ -269,7 +280,7 @@ class _SideMenuState extends State<SideMenu> {
 
     // Return the side menu widget
     return ((widget.global.style.showHamburger) && (_hamburgerMode == SideMenuHamburgerMode.close))
-        ? Align(alignment: Alignment.topLeft, child: hamburgerIcon)
+        ? Align(alignment: Alignment.bottomLeft, child: hamburgerIcon)
         : AnimatedContainer(
             duration: _toggleDuration(),
             width: _currentWidth,
@@ -281,7 +292,6 @@ class _SideMenuState extends State<SideMenu> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (widget.global.style.showHamburger) hamburgerIcon,
                       if (widget.global.style.displayMode == SideMenuDisplayMode.compact && showToggle)
                         const SizedBox(
                           height: 42,
@@ -295,7 +305,12 @@ class _SideMenuState extends State<SideMenu> {
                     (widget.footer != null && alwaysShowFooter))
                   Align(
                     alignment: Alignment.bottomCenter,
-                    child: widget.footer!,
+                    child: Row(
+                      children: [
+                        Expanded(child: widget.footer!),
+                        if (widget.global.style.showHamburger) hamburgerIcon,
+                      ],
+                    ),
                   ),
                 if (widget.global.style.displayMode != SideMenuDisplayMode.auto && showToggle)
                   Padding(
