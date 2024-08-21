@@ -51,6 +51,8 @@ class SideMenu extends StatefulWidget {
   /// Width when will our open menu collapse into the compact one
   final int? collapseWidth;
 
+  final List<bool> expansionStateListInit;
+
   /// ### Easy Sidemenu widget
   ///
   /// Sidemenu is a menu that is usually located
@@ -67,6 +69,7 @@ class SideMenu extends StatefulWidget {
     this.displayModeToggleDuration,
     this.alwaysShowFooter = false,
     this.collapseWidth = 600,
+    required this.expansionStateListInit,
   }) : super(key: key) {
     global.style = style ?? SideMenuStyle();
     global.controller = controller;
@@ -76,7 +79,7 @@ class SideMenu extends StatefulWidget {
         sideMenuExpansionItemCount = sideMenuExpansionItemCount + 1;
       }
     }
-    global.expansionStateList = List<bool>.filled(sideMenuExpansionItemCount, false);
+    global.expansionStateList = expansionStateListInit;
     sidemenuitems.items = items.map((data) {
       if (data is SideMenuItem) {
         return SideMenuItemWithGlobal(

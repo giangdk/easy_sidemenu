@@ -52,6 +52,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           SideMenu(
             controller: sideMenu,
+            expansionStateListInit: const [true, true, true],
             style: SideMenuStyle(
               // showTooltip: false,
               displayMode: SideMenuDisplayMode.auto,
