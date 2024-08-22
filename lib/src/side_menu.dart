@@ -315,6 +315,9 @@ class _SideMenuState extends State<SideMenu> {
                         ),
                       if (widget.title != null) widget.title!,
                       ...widget.sidemenuitems.items,
+                      const SizedBox(
+                        height: 50,
+                      ),
                     ],
                   ),
                 ),
